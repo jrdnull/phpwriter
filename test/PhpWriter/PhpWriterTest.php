@@ -92,14 +92,14 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testImplements()
     {
-        $this->phpWriter->beginType('Foo', PhpWriter::TYPE_CLASS, null, 'Bar')->endType();
+        $this->phpWriter->beginType('Foo', PhpWriter::TYPE_CLASS, null, ['Bar'])->endType();
 
         $this->assertCode('class Foo implements Bar' . PHP_EOL . '{' . PHP_EOL . '}' . PHP_EOL);
     }
 
     public function testImplementsMany()
     {
-        $this->phpWriter->beginType('Foo', PhpWriter::TYPE_CLASS, null, array('Bar', 'Baz'))
+        $this->phpWriter->beginType('Foo', PhpWriter::TYPE_CLASS, null, ['Bar', 'Baz'])
                         ->endType();
 
         $this->assertCode('class Foo implements Bar, Baz' . PHP_EOL . '{' . PHP_EOL . '}' . PHP_EOL);
@@ -107,7 +107,7 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testExtendsAndImplements()
     {
-        $this->phpWriter->beginType('Foo', PhpWriter::TYPE_CLASS, 'Bar', array('Baz', 'Qux'))
+        $this->phpWriter->beginType('Foo', PhpWriter::TYPE_CLASS, 'Bar', ['Baz', 'Qux'])
                         ->endType();
 
         $this->assertCode(
@@ -128,7 +128,7 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
      */
     public function testTraitCannotImplement()
     {
-        $this->phpWriter->beginType('Foo', PhpWriter::TYPE_TRAIT, null, 'Bar');
+        $this->phpWriter->beginType('Foo', PhpWriter::TYPE_TRAIT, null, ['Bar']);
     }
 
     public function testConstant()
@@ -161,14 +161,14 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testUseTrait()
     {
-        $this->phpWriter->emitUseTraits('Foo');
+        $this->phpWriter->emitUseTrait('Foo');
 
         $this->assertCode('use Foo;' . PHP_EOL);
     }
 
     public function testUseTraits()
     {
-        $this->phpWriter->emitUseTraits(array('Foo', 'Bar'));
+        $this->phpWriter->emitUseTraits(['Foo', 'Bar']);
 
         $this->assertCode('use Foo, Bar;' . PHP_EOL);
     }
@@ -182,11 +182,8 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodWithArgs()
     {
-        $this->phpWriter->beginMethod(
-            'foo',
-            PhpWriter::VISIBILITY_PUBLIC,
-            array('bar', 'baz')
-        )->endMethod();
+        $this->phpWriter->beginMethod('foo', PhpWriter::VISIBILITY_PUBLIC, ['bar', 'baz'])
+                        ->endMethod();
 
         $this->assertCode('public function foo($bar, $baz)' . PHP_EOL . '{' . PHP_EOL . '}' . PHP_EOL);
     }
@@ -196,8 +193,8 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
         $this->phpWriter->beginMethod(
             'foo',
             PhpWriter::VISIBILITY_PUBLIC,
-            array('bar'),
-            array('baz' => 12, 'qux' => true)
+            ['bar'],
+            ['baz' => 12, 'qux' => true]
         )->endMethod();
 
         $this->assertCode(
@@ -211,8 +208,8 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
         $this->phpWriter->beginMethod(
             'foo',
             PhpWriter::VISIBILITY_PRIVATE,
-            array('bar'),
-            array('baz' => 12, 'qux' => true),
+            ['bar'],
+            ['baz' => 12, 'qux' => true],
             true
         )->endMethod();
 
@@ -233,8 +230,8 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
     {
         $this->phpWriter->emitNamespace('FooBar')
                         ->emitImport('Cat', 'Dog')
-                        ->beginType('Foo', PhpWriter::TYPE_CLASS, 'Bar', 'Baz')
-                        ->emitUseTraits('Bazzer')
+                        ->beginType('Foo', PhpWriter::TYPE_CLASS, 'Bar', ['Baz'])
+                        ->emitUseTrait('Bazzer')
                         ->emitConstant('RANDOM_NUMBER', 4)
                         ->emitProperty('foo', PhpWriter::VISIBILITY_PRIVATE, false, 12)
                         ->beginMethod('getFoo', PhpWriter::VISIBILITY_PUBLIC)
