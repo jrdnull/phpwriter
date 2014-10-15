@@ -233,15 +233,44 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
         $this->assertCode('echo \'foo\';' . PHP_EOL);
     }
 
+    public function testDocblock()
+    {
+        $this->phpWriter->emitDocblock(['@return bool']);
+
+        $this->assertCode(
+            '/**' . PHP_EOL
+            . ' * @return bool' . PHP_EOL
+            . ' */' . PHP_EOL
+        );
+    }
+
+    public function testMultilineDocblock()
+    {
+        $this->phpWriter->emitDocblock([
+            'Returns the foo',
+            '',
+            '@return mixed'
+        ]);
+
+        $this->assertCode(
+            '/**' . PHP_EOL
+            . ' * Returns the foo' . PHP_EOL
+            . ' *' . PHP_EOL
+            . ' * @return mixed' . PHP_EOL
+            . ' */' . PHP_EOL
+        );
+    }
+
     public function testKitchenSink()
     {
         $this->phpWriter->openTag()
                         ->emitNamespace('FooBar')
-                        ->emitImport('Cat', 'Dog')
+                        ->emitImport('Biz', 'Baz')
                         ->beginType('Foo', PhpWriter::TYPE_CLASS, 'Bar', ['Baz'])
                         ->emitUseTrait('Bazzer')
                         ->emitConstant('RANDOM_NUMBER', 4)
                         ->emitProperty('foo', PhpWriter::VISIBILITY_PRIVATE, false, 12)
+                        ->emitDocblock(['Returns the foo', '', '@return mixed'])
                         ->beginMethod('getFoo', PhpWriter::VISIBILITY_PUBLIC)
                         ->emitStatement('return $this->foo')
                         ->endMethod()
@@ -252,12 +281,17 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
             '<?php' . PHP_EOL
             . 'namespace FooBar;' . PHP_EOL
             . PHP_EOL
-            . 'use Cat as Dog;' . PHP_EOL
+            . 'use Biz as Baz;' . PHP_EOL
             . 'class Foo extends Bar implements Baz' . PHP_EOL
             . '{' . PHP_EOL
             . '    use Bazzer;' . PHP_EOL
             . '    const RANDOM_NUMBER = 4;' . PHP_EOL
             . '    private $foo = 12;' . PHP_EOL
+            . '    /**' . PHP_EOL
+            . '     * Returns the foo' . PHP_EOL
+            . '     *' . PHP_EOL
+            . '     * @return mixed' . PHP_EOL
+            . '     */' . PHP_EOL
             . '    public function getFoo()' . PHP_EOL
             . '    {' . PHP_EOL
             . '        return $this->foo;' . PHP_EOL

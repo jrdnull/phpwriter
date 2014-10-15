@@ -257,13 +257,31 @@ class PhpWriter
     }
 
     /**
-     * Indents the string to the current level
+     * Indents the line to the current level
      *
-     * @param string $statement
+     * @param string $line
      * @return string
      */
-    protected function indent($statement)
+    protected function indent($line)
     {
-        return str_repeat(self::INDENT, $this->indentLevel) . $statement;
+        return str_repeat(self::INDENT, $this->indentLevel) . $line;
+    }
+
+    /**
+     * Emits Docblock
+     *
+     * @param string[] $lines
+     * @return $this
+     */
+    public function emitDocblock(array $lines)
+    {
+        $docblock = $this->indent('/**' . PHP_EOL);
+        $docblock .= array_reduce($lines, function ($acc, $line) {
+            return $acc . $this->indent($line ? ' * ' . $line : ' *') . PHP_EOL;
+        }, '');
+        $docblock .= $this->indent(' */' . PHP_EOL);
+
+        $this->writer->write($docblock);
+        return $this;
     }
 }
