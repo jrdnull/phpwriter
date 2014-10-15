@@ -2,6 +2,8 @@
 PHPWriter
 =========
 [![Build Status](https://travis-ci.org/jrdnull/phpwriter.svg?branch=master)](https://travis-ci.org/jrdnull/phpwriter)
+[![Code Climate](https://codeclimate.com/github/jrdnull/phpwriter/badges/gpa.svg)](https://codeclimate.com/github/jrdnull/phpwriter)
+[![Test Coverage](https://codeclimate.com/github/jrdnull/phpwriter/badges/coverage.svg)](https://codeclimate.com/github/jrdnull/phpwriter)
 
 Inspired by [JavaWriter](https://github.com/square/javawriter), PHPWriter generates PHP source code.
 
