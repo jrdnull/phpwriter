@@ -29,6 +29,28 @@ class PhpWriter
     }
 
     /**
+     * Emits opening PHP tag
+     *
+     * @return $this
+     */
+    public function openTag()
+    {
+        $this->writer->write('<?php' . PHP_EOL);
+        return $this;
+    }
+
+    /**
+     * Emits closing PHP tag
+     *
+     * @return $this
+     */
+    public function closeTag()
+    {
+        $this->writer->write('?>' . PHP_EOL);
+        return $this;
+    }
+
+    /**
      * Emits namespace
      *
      * @param string $namespace

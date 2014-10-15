@@ -18,6 +18,13 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
         $this->phpWriter = new PhpWriter($this->stringWriter);
     }
 
+    public function testPhpTags()
+    {
+        $this->phpWriter->openTag()->closeTag();
+
+        $this->assertCode('<?php' . PHP_EOL . '?>' . PHP_EOL);
+    }
+
     public function testNamespace()
     {
         $this->phpWriter->emitNamespace('Foo\Bar');
@@ -228,7 +235,8 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testKitchenSink()
     {
-        $this->phpWriter->emitNamespace('FooBar')
+        $this->phpWriter->openTag()
+                        ->emitNamespace('FooBar')
                         ->emitImport('Cat', 'Dog')
                         ->beginType('Foo', PhpWriter::TYPE_CLASS, 'Bar', ['Baz'])
                         ->emitUseTrait('Bazzer')
@@ -237,10 +245,12 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
                         ->beginMethod('getFoo', PhpWriter::VISIBILITY_PUBLIC)
                         ->emitStatement('return $this->foo')
                         ->endMethod()
-                        ->endType();
+                        ->endType()
+                        ->closeTag();
 
         $this->assertCode(
-            'namespace FooBar;' . PHP_EOL
+            '<?php' . PHP_EOL
+            . 'namespace FooBar;' . PHP_EOL
             . PHP_EOL
             . 'use Cat as Dog;' . PHP_EOL
             . 'class Foo extends Bar implements Baz' . PHP_EOL
@@ -253,6 +263,7 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
             . '        return $this->foo;' . PHP_EOL
             . '    }' . PHP_EOL
             . '}' . PHP_EOL
+            . '?>' . PHP_EOL
         );
     }
 
