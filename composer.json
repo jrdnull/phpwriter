@@ -1,6 +1,6 @@
 {
   "name": "jrdnull/phpwriter",
-  "description": "Generate PHP source files",
+  "description": "PHPWriter generates PHP source code",
   "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
