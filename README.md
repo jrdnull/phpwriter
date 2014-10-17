@@ -20,14 +20,18 @@ $phpWriter->openTag()
                   '@var int'
               ])
               ->emitProperty('id', PhpWriter::VISIBILITY_PROTECTED)
+              ->emitNewline()
               ->emitDocblock(['@Column(type="string")', '@var string'])
               ->emitProperty('name', PhpWriter::VISIBILITY_PROTECTED)
+              ->emitNewline()
               ->beginMethod('getId', PhpWriter::VISIBILITY_PUBLIC)
                   ->emitStatement('return $this->id')
               ->endMethod()
+              ->emitNewline()
               ->beginMethod('getName', PhpWriter::VISIBILITY_PUBLIC)
                   ->emitStatement('return $this->name')
               ->endMethod()
+              ->emitNewline()
               ->beginMethod('setName', PhpWriter::VISIBILITY_PUBLIC, ['name'])
                   ->emitStatement('$this->name = $name')
               ->endMethod()
@@ -47,19 +51,23 @@ class Person
      * @var int
      */
     protected $id;
+
     /**
      * @Column(type="string")
      * @var string
      */
     protected $name;
+
     public function getId()
     {
         return $this->id;
     }
+
     public function getName()
     {
         return $this->name;
     }
+
     public function setName($name)
     {
         $this->name = $name;

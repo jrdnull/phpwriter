@@ -257,17 +257,6 @@ class PhpWriter
     }
 
     /**
-     * Indents the line to the current level
-     *
-     * @param string $line
-     * @return string
-     */
-    protected function indent($line)
-    {
-        return str_repeat(self::INDENT, $this->indentLevel) . $line;
-    }
-
-    /**
      * Emits Docblock
      *
      * @param string[] $lines
@@ -283,5 +272,28 @@ class PhpWriter
 
         $this->writer->write($docblock);
         return $this;
+    }
+
+    /**
+     * Emits newline character
+     *
+     * @return $this
+     */
+    public function emitNewline()
+    {
+        $this->writer->write(PHP_EOL);
+
+        return $this;
+    }
+
+    /**
+     * Indents the line to the current level
+     *
+     * @param string $line
+     * @return string
+     */
+    protected function indent($line)
+    {
+        return str_repeat(self::INDENT, $this->indentLevel) . $line;
     }
 }

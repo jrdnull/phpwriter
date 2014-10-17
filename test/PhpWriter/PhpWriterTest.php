@@ -261,15 +261,26 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testNewline()
+    {
+        $this->phpWriter->emitNewline();
+
+        $this->assertCode(PHP_EOL);
+    }
+
     public function testKitchenSink()
     {
         $this->phpWriter->openTag()
                         ->emitNamespace('FooBar')
                         ->emitImport('Biz', 'Baz')
+                        ->emitNewline()
                         ->beginType('Foo', PhpWriter::TYPE_CLASS, 'Bar', ['Baz'])
                         ->emitUseTrait('Bazzer')
+                        ->emitNewline()
                         ->emitConstant('RANDOM_NUMBER', 4)
+                        ->emitNewline()
                         ->emitProperty('foo', PhpWriter::VISIBILITY_PRIVATE, false, 12)
+                        ->emitNewline()
                         ->emitDocblock(['Returns the foo', '', '@return mixed'])
                         ->beginMethod('getFoo', PhpWriter::VISIBILITY_PUBLIC)
                         ->emitStatement('return $this->foo')
@@ -282,11 +293,15 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
             . 'namespace FooBar;' . PHP_EOL
             . PHP_EOL
             . 'use Biz as Baz;' . PHP_EOL
+            . PHP_EOL
             . 'class Foo extends Bar implements Baz' . PHP_EOL
             . '{' . PHP_EOL
             . '    use Bazzer;' . PHP_EOL
+            . PHP_EOL
             . '    const RANDOM_NUMBER = 4;' . PHP_EOL
+            . PHP_EOL
             . '    private $foo = 12;' . PHP_EOL
+            . PHP_EOL
             . '    /**' . PHP_EOL
             . '     * Returns the foo' . PHP_EOL
             . '     *' . PHP_EOL
