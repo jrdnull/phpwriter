@@ -6,11 +6,7 @@ abstract class Writer
 {
     abstract public function write($str);
 
-    public function flush()
-    {
-    }
+    abstract public function flush();
 
-    public function close()
-    {
-    }
+    abstract public function close();
 }

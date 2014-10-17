@@ -308,6 +308,6 @@ class PhpWriterTest extends \PHPUnit_Framework_TestCase
      */
     private function assertCode($expected)
     {
-        $this->assertEquals($expected, $this->stringWriter->toString());
+        $this->assertEquals($expected, $this->stringWriter->getString());
     }
 }
